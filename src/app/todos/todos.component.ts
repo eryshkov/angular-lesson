@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Todo} from '../app.component';
+import {Component, OnInit} from '@angular/core';
+import {TodosService} from '../shared/todos.service';
+import {delay} from 'rxjs/operators';
 
 @Component({
   selector: 'app-todos',
@@ -8,12 +9,25 @@ import {Todo} from '../app.component';
 })
 export class TodosComponent implements OnInit {
 
-  @Input() todos: Todo[] = [];
+  private loading: boolean = true
 
-  constructor() {
+  constructor(private todosService: TodosService) {
   }
 
   ngOnInit() {
+    this.todosService.fetchTodos()
+      .pipe(delay(2000))
+      .subscribe(() => {
+      this.loading = false;
+    });
   }
 
+  onChange(id: number) {
+    // this.onToggle.emit(id);
+    this.todosService.onToggle(id)
+  }
+
+  removeTodo(id: number) {
+    this.todosService.removeTodo(id)
+  }
 }
