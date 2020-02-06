@@ -16,7 +16,7 @@ export class TodosComponent implements OnInit {
 
   ngOnInit() {
     this.todosService.fetchTodos()
-      .pipe(delay(2000))
+      .pipe(delay(500))
       .subscribe(() => {
       this.loading = false;
     });
